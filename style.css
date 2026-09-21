@@ -1,49 +1,61 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* 모든 요소의 크기 계산 기준을 통일합니다. */
+* { box-sizing: border-box; }
 
+/* 페이지 전체의 기본 글자와 배경을 정합니다. */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  margin: 0;
+  color: #1b2233;
+  font-family: "Apple SD Gothic Neo", "Malgun Gothic", Arial, sans-serif;
   line-height: 1.6;
-  color: #1f2328;
-  background: #ffffff;
+  background-color: #f4f6fb;
 }
 
-header {
-  padding: 24px 20px;
-  border-bottom: 1px solid #d0d7de;
+/* 주요 영역의 폭과 좌우 여백을 맞춥니다. */
+.site-header,
+main,
+.site-footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
 }
 
-h1 {
-  font-size: 20px;
+.site-header {
+  padding-top: 72px;
+  padding-bottom: 48px;
 }
 
-main {
-  padding: 24px 20px;
-}
+/* 제목 크기로 정보의 읽는 순서를 만듭니다. */
+h1, h2, h3, p { margin-top: 0; }
+h1 { margin-bottom: 12px; font-size: 44px; line-height: 1.2; }
+h2 { margin-bottom: 24px; font-size: 30px; }
+h3 { margin-bottom: 10px; font-size: 20px; }
 
-h2 {
-  font-size: 16px;
-  margin-bottom: 12px;
-}
-
-#status {
-  margin-bottom: 16px;
-  color: #59636e;
-}
-
-button {
-  padding: 8px 16px;
+.eyebrow {
+  margin: 0 0 8px;
+  color: #2f6fed;
   font-size: 14px;
-  color: #ffffff;
-  background: #1f6feb;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: .08em;
 }
 
-button:hover {
-  background: #1a5fd0;
+.header-description {
+  margin-bottom: 28px;
+  color: #5e6272;
+  font-size: 18px;
+}
+
+/* 각 section을 하나의 카드 영역으로 구분합니다. */
+.content-section {
+  margin-bottom: 24px;
+  padding: 40px;
+  border: 1px solid #dfe4ef;
+  border-radius: 18px;
+  background-color: #fff;
+}
+
+.site-footer {
+  padding: 16px 0 40px;
+  color: #5e6272;
+  font-size: 14px;
 }
