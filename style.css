@@ -158,3 +158,53 @@ input[type="email"]:focus {
 .primary-button:hover { background-color: #1a5fd0; }
 .primary-button:focus { outline: 3px solid #a9c6ff; outline-offset: 3px; }
 .primary-button:active { transform: translateY(1px); }
+
+/* 768px 이하에서는 가로 배치를 세로로 바꾸고 글자와 여백을 줄입니다. */
+@media (max-width: 768px) {
+  body { font-size: 16px; }
+
+  .site-header {
+    padding-top: 32px;
+    padding-bottom: 24px;
+  }
+
+  h1 { font-size: 36px; }
+  h2 { font-size: 28px; }
+
+  .content-section {
+    margin-bottom: 16px;
+    padding: 24px;
+  }
+
+  /* 메뉴를 세로로 쌓고 링크마다 누를 여백을 줍니다. */
+  .site-nav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .site-nav a { padding: 8px 0; }
+
+  /* 소개 글과 이미지를 위아래로 놓습니다. */
+  .about-layout {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+
+  .service-image { max-width: 100%; }
+
+  /* 기능 카드를 한 열로 놓습니다. */
+  .feature-list { grid-template-columns: 1fr; }
+
+  /* 입력창과 버튼을 위아래로 놓고 화면 너비에 맞춥니다. */
+  .subscribe-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  input[type="email"],
+  .primary-button { width: 100%; }
+
+  .primary-button { min-height: 48px; }
+}
