@@ -1,8 +1,11 @@
-// 알림 신청 폼에서 쓰는 요소를 고릅니다.
-const subscribeForm = document.getElementById('subscribe-form');
-const emailInput = document.getElementById('email');
-const subscribeButton = document.getElementById('subscribe-button');
-const formMessage = document.getElementById('form-message');
+// 개발자 도구의 Console에서 연결을 확인합니다.
+console.log('JavaScript가 연결되었습니다.');
+
+// 알림 신청 폼의 네 요소를 id로 찾습니다.
+const subscribeForm = document.querySelector('#subscribe-form');
+const emailInput = document.querySelector('#email');
+const subscribeButton = document.querySelector('#subscribeButton');
+const subscribeMessage = document.querySelector('#subscribeMessage');
 
 // 이메일 모양인지 확인하는 규칙입니다. (아이디@도메인.확장자)
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -13,15 +16,15 @@ let isSubscribed = false;
 
 // 안내 문구와 입력창의 모양을 결과에 맞게 바꿉니다.
 function showMessage(text, type) {
-  formMessage.textContent = text;
-  formMessage.classList.remove('is-error', 'is-success');
+  subscribeMessage.textContent = text;
+  subscribeMessage.classList.remove('is-error', 'is-success');
   emailInput.classList.remove('is-invalid');
 
   if (type === 'error') {
-    formMessage.classList.add('is-error');
+    subscribeMessage.classList.add('is-error');
     emailInput.classList.add('is-invalid');
   } else if (type === 'success') {
-    formMessage.classList.add('is-success');
+    subscribeMessage.classList.add('is-success');
   }
 }
 
@@ -59,7 +62,7 @@ function handleInput() {
     return;
   }
 
-  if (formMessage.classList.contains('is-error')) {
+  if (subscribeMessage.classList.contains('is-error')) {
     showMessage('', '');
   }
 }
