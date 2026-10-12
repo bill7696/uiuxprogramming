@@ -6,6 +6,7 @@
   <title>시세 알림 | 서비스 소개</title>
   <link rel="stylesheet" href="https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css">
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
   <!-- UX 계획
@@ -75,13 +76,15 @@
     <section id="subscribe" class="content-section subscribe-section">
       <h2>알림 받기</h2>
 
-      <form class="subscribe-form">
+      <form class="subscribe-form" id="subscribe-form" novalidate>
         <label class="email-field" for="email">이메일
-          <input type="email" id="email" name="email" placeholder="name@example.com">
+          <input type="email" id="email" name="email" placeholder="name@example.com" autocomplete="email">
         </label>
 
-        <button class="primary-button" type="submit">시세 알림 신청하기</button>
+        <button class="primary-button" id="subscribe-button" type="submit">시세 알림 신청하기</button>
       </form>
+
+      <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
     </section>
   </main>
 
