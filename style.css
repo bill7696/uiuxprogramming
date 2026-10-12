@@ -159,6 +159,34 @@ input[type="email"]:focus-visible {
 .primary-button:focus-visible { outline: 3px solid #a9c6ff; outline-offset: 3px; }
 .primary-button:active { transform: translateY(1px); }
 
+/* 신청이 끝난 버튼은 색을 낮추고 다시 누를 수 없게 보입니다. */
+.primary-button:disabled {
+  background-color: #1f9d55;
+  cursor: default;
+}
+
+.primary-button:disabled:active { transform: none; }
+
+/* 입력값이 잘못되면 입력창 테두리를 붉게 바꿉니다. */
+input[type="email"].is-invalid { border-color: #d64545; }
+
+input[type="email"].is-invalid:focus-visible {
+  border-color: #d64545;
+  outline-color: #f6d4d4;
+}
+
+/* 처리 결과 안내 문구. 내용이 없으면 자리도 차지하지 않습니다. */
+.form-message {
+  margin: 12px 0 0;
+  max-width: 570px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.form-message:empty { display: none; }
+.form-message.is-error { color: #d64545; }
+.form-message.is-success { color: #1f9d55; }
+
 /* 768px 이하에서는 가로 배치를 세로로 바꾸고 글자와 여백을 줄입니다. */
 @media (max-width: 768px) {
   body { font-size: 16px; }
