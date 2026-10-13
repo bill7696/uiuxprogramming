@@ -49,6 +49,7 @@ function handleSubscribe(event) {
   isSubscribed = true;
   showMessage(`${email} 으로 시세 알림을 보내드립니다.`, 'success');
   subscribeButton.textContent = '신청 완료';
+  subscribeButton.classList.add('is-done');
   subscribeButton.disabled = true;
 }
 
@@ -57,6 +58,7 @@ function handleInput() {
   if (isSubscribed) {
     isSubscribed = false;
     subscribeButton.textContent = defaultButtonText;
+    subscribeButton.classList.remove('is-done');
     subscribeButton.disabled = false;
     showMessage('', '');
     return;
@@ -69,3 +71,76 @@ function handleInput() {
 
 subscribeForm.addEventListener('submit', handleSubscribe);
 emailInput.addEventListener('input', handleInput);
+
+// 알림 설정 영역의 여섯 요소를 id로 찾습니다.
+const themeButton = document.querySelector('#themeButton');
+const tickerInput = document.querySelector('#ticker');
+const tickerCount = document.querySelector('#tickerCount');
+const agreeCheck = document.querySelector('#agreeCheck');
+const agreeMessage = document.querySelector('#agreeMessage');
+const startButton = document.querySelector('#startButton');
+
+// click: body의 dark 클래스를 켜고 끄며 버튼 문구를 맞춥니다.
+function handleThemeClick() {
+  const isDark = document.body.classList.toggle('dark');
+  themeButton.textContent = isDark ? '라이트 테마로 바꾸기' : '다크 테마로 바꾸기';
+  themeButton.setAttribute('aria-pressed', String(isDark));
+}
+
+// input: 글자를 넣거나 지울 때마다 현재 글자 수를 보여줍니다.
+function handleTickerInput() {
+  const currentLength = tickerInput.value.length;
+  tickerCount.textContent = currentLength + ' / 10';
+}
+
+// change: 동의 여부에 따라 문구·클래스·버튼 상태를 함께 바꿉니다.
+function handleAgreeChange() {
+  const agreed = agreeCheck.checked;
+  startButton.disabled = !agreed;
+  agreeMessage.textContent = agreed ? '알림 수신에 동의했습니다.' : '알림 수신 동의 전입니다.';
+
+  if (agreed) {
+    agreeMessage.classList.add('is-ready');
+  } else {
+    agreeMessage.classList.remove('is-ready');
+  }
+}
+
+themeButton.addEventListener('click', handleThemeClick);
+tickerInput.addEventListener('input', handleTickerInput);
+agreeCheck.addEventListener('change', handleAgreeChange);
+
+// 기능 탭: 버튼과 패널을 모두 찾아 같은 click 함수를 연결합니다.
+const tabs = document.querySelectorAll('.tab');
+const panels = document.querySelectorAll('.panel');
+
+// 모든 탭과 패널을 선택되지 않은 상태로 되돌립니다.
+function resetTabsAndPanels() {
+  tabs.forEach(function (tab) {
+    tab.classList.remove('is-active');
+    tab.setAttribute('aria-selected', 'false');
+  });
+  panels.forEach(function (panel) {
+    panel.classList.remove('is-active');
+    panel.hidden = true;
+  });
+}
+
+// 누른 탭과 data-target이 가리키는 패널만 선택 상태로 만듭니다.
+function activateTab(clickedTab) {
+  const targetSelector = clickedTab.dataset.target;
+  const targetPanel = document.querySelector(targetSelector);
+  clickedTab.classList.add('is-active');
+  clickedTab.setAttribute('aria-selected', 'true');
+  targetPanel.classList.add('is-active');
+  targetPanel.hidden = false;
+}
+
+function handleTabClick(event) {
+  resetTabsAndPanels();
+  activateTab(event.currentTarget);
+}
+
+tabs.forEach(function (tab) {
+  tab.addEventListener('click', handleTabClick);
+});
