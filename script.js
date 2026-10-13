@@ -144,3 +144,137 @@ function handleTabClick(event) {
 tabs.forEach(function (tab) {
   tab.addEventListener('click', handleTabClick);
 });
+
+// 알림 등록 흐름: 알림 시작하기 버튼에서 들어와 종목 → 조건 → 확인 → 완료 순서로 진행합니다.
+const alertFlow = document.querySelector('#alertFlow');
+const alertSteps = document.querySelectorAll('.alert-step');
+const alertProgress = document.querySelector('#alertProgress');
+const alertTicker = document.querySelector('#alertTicker');
+const alertTickerError = document.querySelector('#alertTickerError');
+const alertCondition = document.querySelector('#alertCondition');
+const targetPriceField = document.querySelector('#targetPriceField');
+const targetPrice = document.querySelector('#targetPrice');
+const targetPriceError = document.querySelector('#targetPriceError');
+const alertSummary = document.querySelector('#alertSummary');
+const alertResult = document.querySelector('#alertResult');
+const alertConfirm = document.querySelector('#alertConfirm');
+const alertConfirmText = document.querySelector('#alertConfirmText');
+
+// 단계 번호에 맞는 영역 하나만 보이고 진행 표시를 맞춥니다.
+function showStep(step) {
+  alertSteps.forEach(function (item) {
+    item.hidden = Number(item.dataset.step) !== step;
+  });
+  alertProgress.textContent = step <= 3 ? step + ' / 3 · 등록 단계' : '등록 완료';
+}
+
+// 입력창에 오류 표시를 붙이거나 뗍니다.
+function setFieldError(input, errorElement, message) {
+  errorElement.textContent = message;
+  if (message) {
+    input.classList.add('has-error');
+    input.focus();
+  } else {
+    input.classList.remove('has-error');
+  }
+}
+
+// 입력·선택한 값을 한 문장으로 만듭니다.
+function makeAlertSummary() {
+  const ticker = alertTicker.value.trim().toUpperCase();
+  if (alertCondition.value === 'target') {
+    const price = Number(targetPrice.value).toLocaleString('ko-KR');
+    return ticker + ' · 목표 가격 ' + price + ' 도달 시 알림';
+  }
+  return ticker + ' · 하루 한 번 시세 요약 알림';
+}
+
+// 진입: 동의 후 켜진 알림 시작하기 버튼을 누르면 흐름이 열립니다.
+function handleStartClick() {
+  alertFlow.hidden = false;
+  showStep(1);
+  alertTicker.focus();
+}
+
+// 1단계 → 2단계: 종목 코드가 비어 있으면 현재 단계에 머뭅니다.
+function handleNext1Click() {
+  if (alertTicker.value.trim() === '') {
+    setFieldError(alertTicker, alertTickerError, '알림받을 종목 코드를 입력해 주세요.');
+    return;
+  }
+  setFieldError(alertTicker, alertTickerError, '');
+  showStep(2);
+}
+
+// 조건 선택: 목표 가격 도달일 때만 가격 입력칸을 보입니다.
+function handleConditionChange() {
+  const needsPrice = alertCondition.value === 'target';
+  targetPriceField.hidden = !needsPrice;
+  if (!needsPrice) {
+    targetPrice.value = '';
+    setFieldError(targetPrice, targetPriceError, '');
+  }
+}
+
+// 2단계 → 3단계: 보이는 가격 입력칸만 검사하고 요약을 만듭니다.
+function handleNext2Click() {
+  const needsPrice = alertCondition.value === 'target';
+  const price = Number(targetPrice.value);
+  if (needsPrice && (targetPrice.value.trim() === '' || !(price > 0))) {
+    setFieldError(targetPrice, targetPriceError, '목표 가격을 0보다 큰 숫자로 입력해 주세요.');
+    return;
+  }
+  setFieldError(targetPrice, targetPriceError, '');
+  alertSummary.textContent = makeAlertSummary();
+  showStep(3);
+}
+
+// 이전: 값은 그대로 두고 단계만 돌아갑니다.
+function handleBack2Click() {
+  showStep(1);
+}
+
+function handleBack3Click() {
+  showStep(2);
+}
+
+// 확인 팝업: 취소하면 값을 유지한 채 닫고, 확정하면 완료 단계로 갑니다.
+function handleCompleteClick() {
+  alertConfirmText.textContent = alertSummary.textContent;
+  alertConfirm.showModal();
+}
+
+function handleConfirmCancel() {
+  alertConfirm.close();
+}
+
+function handleConfirmSubmit() {
+  alertConfirm.close();
+  alertResult.textContent = alertSummary.textContent;
+  showStep(4);
+}
+
+// 다시 등록하기: 입력·선택·오류·진행 상태를 모두 처음으로 되돌립니다.
+function handleRestartClick() {
+  alertTicker.value = '';
+  alertCondition.value = 'target';
+  targetPrice.value = '';
+  targetPriceField.hidden = false;
+  setFieldError(alertTicker, alertTickerError, '');
+  setFieldError(targetPrice, targetPriceError, '');
+  alertSummary.textContent = '';
+  alertResult.textContent = '';
+  showStep(1);
+  alertTicker.focus();
+}
+
+startButton.addEventListener('click', handleStartClick);
+document.querySelector('#alertNext1').addEventListener('click', handleNext1Click);
+alertCondition.addEventListener('change', handleConditionChange);
+document.querySelector('#alertNext2').addEventListener('click', handleNext2Click);
+document.querySelector('#alertBack2').addEventListener('click', handleBack2Click);
+document.querySelector('#alertBack3').addEventListener('click', handleBack3Click);
+document.querySelector('#alertComplete').addEventListener('click', handleCompleteClick);
+document.querySelector('#confirmCancel').addEventListener('click', handleConfirmCancel);
+document.querySelector('#confirmSubmit').addEventListener('click', handleConfirmSubmit);
+document.querySelector('#alertRestart').addEventListener('click', handleRestartClick);
