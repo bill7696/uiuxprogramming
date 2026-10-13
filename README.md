@@ -12,17 +12,19 @@ BTC·ETH·SOXL처럼 코인과 주식을 함께 지켜보는 사람이 목표 �
 | 사용자 | BTC·ETH·SOXL처럼 코인과 주식을 함께 지켜보는 사람 |
 | 목적 | 목표 가격에 닿은 종목을 바로 안다 |
 | 핵심 행동 | 관심 종목과 목표 가격을 등록하고 이메일 알림을 신청한다 |
-| 정보 순서 | 소개 → 주요 기능 → 이용 방법 → 알림 받기 |
+| 정보 순서 | 소개 → 주요 기능 → 이용 방법 → 알림 설정 → 알림 받기 |
 
 ## 화면 구조
 
 ```
 body
-├── header        h1 · p · nav (a ×4)
+├── header        h1 · p · nav (a ×5)
 ├── main
 │   ├── section#about      h2 · h3 · p · img
-│   ├── section#features   h2 · ul > li (h3 · p)
+│   ├── section#features   h2 · div.tabs > button.tab ×3 · div.panel ×3 (h3 · p)
 │   ├── section#steps      h2 · ol > li
+│   ├── section#settings   h2 · div.event-grid > article.event-card ×3
+│   │                        (테마 button · 종목 input + p 글자 수 · 동의 checkbox + p + button)
 │   └── section#subscribe  h2 · form (label · input · button) · p.form-message
 └── footer        p
 ```
@@ -34,7 +36,7 @@ body
 | `index.html` | 서비스 소개 페이지의 HTML 구조 |
 | `style.css` | 페이지 전체의 색·크기·여백·배치와 반응형 규칙 |
 | `assets/images/service.jpg` | 관심 종목 화면 이미지 |
-| `script.js` | 알림 신청 폼의 입력 검증과 처리 결과 안내 |
+| `script.js` | 알림 신청 폼 검증, 테마·글자 수·동의 상태 변경, 기능 탭 전환 |
 
 글꼴은 Spoqa Han Sans Neo 웹폰트를 CDN으로 불러와 씁니다 (`index.html`의 `<link>`).
 불러오지 못하면 Apple SD Gothic Neo · Malgun Gothic 순으로 대체됩니다.
@@ -161,6 +163,46 @@ h1을 44px에서 36px로, h2를 30px에서 28px로, 섹션 안쪽 여백을 40px
 | --- | --- | --- | --- | --- | --- |
 | 1100px | 오류 문구 | 오류 문구 | 신청 완료 | 줄바꿈 | 없음 |
 | 390px | 오류 문구 | 오류 문구 | 신청 완료 | 줄바꿈 | 없음 |
+
+## 6주차 이벤트 처리와 동적 UI 기록
+
+**주요 기능 카드 세 장을 탭 UI로 바꿨습니다.**
+4주차의 `.feature-list` 격자를 `.tabs`(버튼 3개)와 `.panel`(패널 3개)로 바꿨습니다. 버튼의
+`data-target`이 패널의 id를 가리키고, `aria-controls`·`aria-selected`·`aria-labelledby`·`hidden`으로
+어느 탭이 선택됐는지 보조기기에도 알립니다. `querySelectorAll('.tab')`로 버튼을 모두 찾아
+`forEach`로 같은 `handleTabClick`을 연결하고, 누른 버튼은 `event.currentTarget`으로 알아냅니다.
+`resetTabsAndPanels`가 전부 초기화한 뒤 `activateTab`이 누른 탭과 패널만 켭니다.
+
+**알림 설정 영역을 추가하고 click · input · change 이벤트를 하나씩 연결했습니다.**
+
+| 이벤트 | 요소 | 함수 | 바뀌는 것 |
+| --- | --- | --- | --- |
+| click | `#themeButton` | `handleThemeClick` | `body.dark` 토글(`classList.toggle`) · 버튼 문구 · `aria-pressed` |
+| input | `#ticker` | `handleTickerInput` | `#tickerCount`에 `value.length + " / 10"` (`maxlength="10"`) |
+| change | `#agreeCheck` | `handleAgreeChange` | `#agreeMessage` 문구와 `is-ready` 클래스 · `#startButton`의 `disabled` |
+
+**비활성 버튼과 완료 버튼의 색을 분리했습니다.**
+5주차에는 `:disabled`가 곧 "신청 완료"라 초록이었습니다. 6주차의 알림 시작 버튼은 동의 전에
+비활성으로 시작하므로, `:disabled`는 회색으로 두고 신청이 끝난 버튼에만 `is-done` 클래스를
+붙여 초록으로 보이게 했습니다.
+
+**다크 테마는 JavaScript가 클래스만 바꾸고 색은 CSS가 맡습니다.**
+`body.dark` 아래에 바탕·카드·탭·패널·입력창·안내 문구의 색을 따로 적었습니다.
+
+**768px 이하에서는 탭을 세로로 쌓고 설정 카드를 한 열로 놓습니다.**
+선택된 탭은 밑줄 대신 왼쪽 세로선으로 표시하고, 버튼은 폭 100%에 높이 48px 이상으로 둡니다.
+
+### 테스트 결과
+
+| 검수 항목 | 조작 | 결과 (1100px / 390px) |
+| --- | --- | --- |
+| click | 테마 버튼 2회 | `body.dark` 켜짐→꺼짐, 버튼 문구 "라이트 테마로 바꾸기"↔"다크 테마로 바꾸기" 동시 전환 |
+| input | 입력 · 삭제 · 11자 | 0 / 10 → 4 / 10 → 10 / 10, 11번째 글자는 `maxlength`가 막음 |
+| change | 체크 · 해제 · Space | 문구·`is-ready`·`disabled` 세 가지가 함께 바뀜 |
+| 탭 | 탭 3개 클릭 | 활성 탭 1개 · 보이는 패널 1개, `data-target`과 패널 id 일치 |
+| 키보드 | Tab → Enter · Space | 탭 버튼과 체크박스가 키보드만으로 조작됨 |
+| 모바일 | 390px, 라이트·다크 | 탭 세로, 카드 1열, 가로 스크롤 없음 |
+| 5주차 폼 | 빈 값 · 형식 오류 · 정상 | 다크 테마에서도 세 갈래 안내와 버튼 상태 정상 |
 
 ## 실행
 
