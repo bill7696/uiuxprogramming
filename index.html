@@ -12,7 +12,7 @@
        사용자: BTC·ETH·SOXL처럼 코인과 주식을 함께 지켜보는 사람
        목적: 목표 가격에 닿은 종목을 바로 안다
        핵심 행동: 관심 종목과 목표 가격을 등록하고 이메일 알림을 신청한다
-       정보 순서: 소개 → 주요 기능 → 이용 방법 → 알림 받기 -->
+       정보 순서: 소개 → 주요 기능 → 이용 방법 → 알림 설정 → 알림 받기 -->
 
   <header class="site-header">
     <p class="eyebrow">PRICE ALERT SERVICE</p>
@@ -23,6 +23,7 @@
       <a href="#about">서비스 소개</a>
       <a href="#features">주요 기능</a>
       <a href="#steps">이용 방법</a>
+      <a href="#settings">알림 설정</a>
       <a href="#subscribe">알림 받기</a>
     </nav>
   </header>
@@ -46,20 +47,30 @@
     <section id="features" class="content-section">
       <h2>주요 기능</h2>
 
-      <ul class="feature-list">
-        <li class="feature-card">
-          <h3>관심 종목 등록</h3>
-          <p>BTC·ETH·SOXL처럼 코인과 주식을 함께 담습니다.</p>
-        </li>
-        <li class="feature-card">
-          <h3>목표 가격 알림</h3>
-          <p>정해 둔 가격에 닿으면 바로 알립니다.</p>
-        </li>
-        <li class="feature-card">
-          <h3>최근 추이 보기</h3>
-          <p>24시간 동안 오르내린 폭을 함께 보여줍니다.</p>
-        </li>
-      </ul>
+      <div class="tabs" role="tablist" aria-label="기능 선택">
+        <button id="tab-watchlist" class="tab is-active" type="button" role="tab"
+                aria-selected="true" aria-controls="feature-watchlist"
+                data-target="#feature-watchlist">관심 종목 등록</button>
+        <button id="tab-alert" class="tab" type="button" role="tab"
+                aria-selected="false" aria-controls="feature-alert"
+                data-target="#feature-alert">목표 가격 알림</button>
+        <button id="tab-trend" class="tab" type="button" role="tab"
+                aria-selected="false" aria-controls="feature-trend"
+                data-target="#feature-trend">최근 추이 보기</button>
+      </div>
+
+      <div id="feature-watchlist" class="panel is-active" role="tabpanel" aria-labelledby="tab-watchlist">
+        <h3>관심 종목 등록</h3>
+        <p>BTC·ETH·SOXL처럼 코인과 주식을 함께 담습니다.</p>
+      </div>
+      <div id="feature-alert" class="panel" role="tabpanel" aria-labelledby="tab-alert" hidden>
+        <h3>목표 가격 알림</h3>
+        <p>정해 둔 가격에 닿으면 바로 알립니다.</p>
+      </div>
+      <div id="feature-trend" class="panel" role="tabpanel" aria-labelledby="tab-trend" hidden>
+        <h3>최근 추이 보기</h3>
+        <p>24시간 동안 오르내린 폭을 함께 보여줍니다.</p>
+      </div>
     </section>
 
     <section id="steps" class="content-section">
@@ -70,6 +81,35 @@
         <li>종목마다 목표 가격을 정합니다.</li>
         <li>알림을 받고 매매 시점을 확인합니다.</li>
       </ol>
+    </section>
+
+    <section id="settings" class="content-section">
+      <h2>알림 설정</h2>
+
+      <div class="event-grid">
+        <article class="event-card">
+          <h3>화면 테마</h3>
+          <button id="themeButton" class="secondary-button" type="button" aria-pressed="false">다크 테마로 바꾸기</button>
+        </article>
+
+        <article class="event-card">
+          <h3>관심 종목</h3>
+          <label class="text-field" for="ticker">종목 코드
+            <input type="text" id="ticker" name="ticker" maxlength="10" placeholder="BTC" autocomplete="off">
+          </label>
+          <p id="tickerCount" class="count" aria-live="polite">0 / 10</p>
+        </article>
+
+        <article class="event-card">
+          <h3>알림 수신 동의</h3>
+          <label class="agree-row">
+            <input type="checkbox" id="agreeCheck">
+            목표 가격 도달 알림 수신에 동의합니다.
+          </label>
+          <p id="agreeMessage" class="agree-message" aria-live="polite">알림 수신 동의 전입니다.</p>
+          <button id="startButton" class="primary-button" type="button" disabled>알림 시작하기</button>
+        </article>
+      </div>
     </section>
 
     <section id="subscribe" class="content-section subscribe-section">
