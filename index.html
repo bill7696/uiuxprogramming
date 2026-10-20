@@ -11,8 +11,8 @@
   <!-- UX 계획
        사용자: BTC·ETH·SOXL처럼 코인과 주식을 함께 지켜보는 사람
        목적: 목표 가격에 닿은 종목을 바로 안다
-       핵심 행동: 종목과 알림 조건을 정해 알림을 등록하고 이메일 알림을 신청한다
-       정보 순서: 소개 → 주요 기능 → 이용 방법 → 알림 설정 → 알림 받기 -->
+       핵심 행동: 종목과 알림 조건을 정해 알림을 등록하고, 등록한 알림을 목록에서 확인하고 필요 없는 것은 지운다
+       정보 순서: 소개 → 주요 기능 → 이용 방법 → 알림 설정 → 알림 등록 → 등록한 알림 → 알림 받기 -->
 
   <header class="site-header">
     <p class="eyebrow">PRICE ALERT SERVICE</p>
@@ -24,6 +24,7 @@
       <a href="#features">주요 기능</a>
       <a href="#steps">이용 방법</a>
       <a href="#settings">알림 설정</a>
+      <a href="#alertList">등록한 알림</a>
       <a href="#subscribe">알림 받기</a>
     </nav>
   </header>
@@ -148,6 +149,7 @@
       <div class="alert-step" data-step="3" hidden>
         <h3>등록 내용 확인</h3>
         <p id="alertSummary" class="flow-summary"></p>
+        <p id="alertDuplicateError" class="field-error" role="alert"></p>
         <div class="flow-actions">
           <button id="alertBack3" class="secondary-button" type="button">이전</button>
           <button id="alertComplete" class="primary-button" type="button">알림 등록</button>
@@ -158,6 +160,7 @@
         <h3>알림 등록이 완료되었습니다</h3>
         <p id="alertResult" class="flow-summary is-done"></p>
         <div class="flow-actions">
+          <button id="alertShowList" class="primary-button" type="button">등록한 알림 보기</button>
           <button id="alertRestart" class="secondary-button" type="button">다시 등록하기</button>
         </div>
       </div>
@@ -168,6 +171,28 @@
         <div class="flow-actions">
           <button id="confirmCancel" class="secondary-button" type="button">다시 확인</button>
           <button id="confirmSubmit" class="primary-button" type="button">등록 확정</button>
+        </div>
+      </dialog>
+    </section>
+
+    <section id="alertList" class="content-section">
+      <h2>등록한 알림</h2>
+      <p id="alertListCount" class="list-count" aria-live="polite">0개</p>
+
+      <ul id="alertListItems" class="alert-list" aria-label="등록한 알림 목록" hidden></ul>
+      <p id="alertListEmpty" class="list-empty">등록한 알림이 없습니다.</p>
+      <p id="alertListMessage" class="list-message" role="status" aria-live="polite"></p>
+
+      <div class="flow-actions">
+        <button id="alertListAdd" class="primary-button" type="button">알림 등록하기</button>
+      </div>
+
+      <dialog id="deleteConfirm" class="flow-dialog" aria-labelledby="deleteConfirmTitle">
+        <h3 id="deleteConfirmTitle">이 알림을 삭제할까요?</h3>
+        <p id="deleteConfirmText" class="flow-summary"></p>
+        <div class="flow-actions">
+          <button id="deleteCancel" class="secondary-button" type="button">취소</button>
+          <button id="deleteSubmit" class="danger-button" type="button">삭제</button>
         </div>
       </dialog>
     </section>
