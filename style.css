@@ -367,6 +367,94 @@ input[type="email"].is-invalid:focus-visible {
 
 .flow-dialog::backdrop { background-color: rgba(27, 34, 51, .6); }
 
+/* 등록한 알림 목록. 항목마다 카드 한 줄이고, 비어 있으면 안내 문구만 보입니다. */
+.list-count {
+  margin-bottom: 16px;
+  color: #5e6272;
+  font-weight: 700;
+}
+
+.alert-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.alert-list[hidden] { display: none; }
+
+.alert-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 0;
+  padding: 16px 20px;
+  border: 1px solid #dfe4ef;
+  border-radius: 14px;
+  background-color: #f8f9fc;
+}
+
+.alert-item-text {
+  min-width: 0;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+/* 삭제 버튼은 붉은 테두리로 다른 버튼과 구분합니다. */
+.alert-item-delete {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border-color: #d64545;
+  color: #d64545;
+}
+
+.alert-item-delete:hover { color: #fff; background-color: #d64545; }
+
+.list-empty {
+  margin: 0;
+  padding: 24px;
+  border: 1px dashed #bfc6d6;
+  border-radius: 14px;
+  color: #5e6272;
+  font-weight: 700;
+  text-align: center;
+}
+
+.list-empty[hidden] { display: none; }
+
+/* 등록·삭제·취소 결과 문구. 내용이 없으면 자리도 차지하지 않습니다. */
+.list-message {
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.list-message:empty { display: none; }
+.list-message.is-success { color: #245c3a; background-color: #e7f7ed; }
+.list-message.is-error { color: #a93232; background-color: #fdeaea; }
+.list-message.is-muted { color: #5e6272; background-color: #eef0f5; }
+
+/* 되돌릴 수 없는 삭제 버튼은 붉은 바탕으로 보입니다. */
+.danger-button {
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  background-color: #d64545;
+  cursor: pointer;
+  transition: background-color .2s ease, transform .1s ease;
+}
+
+.danger-button:hover { background-color: #b83a3a; }
+.danger-button:focus-visible { outline: 3px solid #f6b4b4; outline-offset: 3px; }
+.danger-button:active { transform: translateY(1px); }
+
 /* 다크 테마. body에 dark 클래스가 붙으면 바탕과 카드 색을 바꿉니다. */
 body.dark {
   color: #f4f4f8;
@@ -385,6 +473,7 @@ body.dark .content-section,
 body.dark .subscribe-section,
 body.dark .event-card,
 body.dark .alert-step,
+body.dark .alert-item,
 body.dark .flow-dialog,
 body.dark .panel {
   border-color: #50515f;
@@ -406,6 +495,13 @@ body.dark .flow-progress { color: #d8d8e2; }
 body.dark .flow-summary { color: #f4f4f8; background-color: #3a3b4a; }
 body.dark .flow-summary.is-done { color: #9fe3b8; background-color: #1f3d2c; }
 body.dark .field-error { color: #ffb4b4; }
+body.dark .list-count { color: #d8d8e2; }
+body.dark .list-empty { color: #d8d8e2; border-color: #50515f; }
+body.dark .list-message.is-success { color: #9fe3b8; background-color: #1f3d2c; }
+body.dark .list-message.is-error { color: #ffb4b4; background-color: #4a2626; }
+body.dark .list-message.is-muted { color: #d8d8e2; background-color: #3a3b4a; }
+body.dark .alert-item-delete { color: #ffb4b4; border-color: #ffb4b4; }
+body.dark .alert-item-delete:hover { color: #20212a; background-color: #ffb4b4; }
 
 body.dark input[type="email"],
 body.dark input[type="text"],
@@ -489,7 +585,15 @@ body.dark .form-message.is-success { color: #9fe3b8; background-color: #1f3d2c; 
   /* 등록 단계의 버튼을 세로로 쌓고 화면 너비에 맞춥니다. */
   .alert-step { padding: 16px; }
   .flow-actions { flex-direction: column; }
-  .flow-actions .primary-button { width: 100%; min-height: 48px; }
+  .flow-actions .primary-button,
+  .flow-actions .danger-button { width: 100%; min-height: 48px; }
+
+  /* 목록 항목의 문구와 삭제 버튼을 위아래로 놓습니다. */
+  .alert-item {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+  }
 
   /* 입력창과 버튼을 위아래로 놓고 화면 너비에 맞춥니다. */
   .subscribe-form {
